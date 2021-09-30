@@ -77,6 +77,7 @@ Node version file:
 The `node-version-file` input allows you to use a file within your repository which contains the version of node your project uses for example `.nvmrc`. If both the `node-version` and the `node-version-file` inputs are provided the `node-version` input is used.
 > The node version file is read from the project root
 
+
 ```yaml
 steps:
 - uses: actions/checkout@v2
