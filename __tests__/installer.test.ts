@@ -6,7 +6,7 @@ import cp from 'child_process';
 import osm = require('os');
 import path from 'path';
 import * as main from '../src/main';
-import * as nv from '../src/node-version';
+import * as nv from '../src/node-version';  // TODO: remove this when refactoring test
 import * as nvf from '../src/node-version-file';
 import * as auth from '../src/authutil';
 
