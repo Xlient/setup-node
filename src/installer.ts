@@ -8,9 +8,12 @@ import * as path from 'path';
 import * as semver from 'semver';
 import fs = require('fs');
 
+//
+// Node versions interface
+// see https://nodejs.org/dist/index.json
+//
 
-
-interface INodeVersion {
+export interface INodeVersion {
   version: string;
   files: string[];
 }
@@ -383,7 +386,7 @@ async function queryDistForMatch(
   return version;
 }
 
-async function getVersionsFromDist(): Promise<INodeVersion[]> {
+export async function getVersionsFromDist(): Promise<INodeVersion[]> {
   let dataUrl = 'https://nodejs.org/dist/index.json';
   let httpClient = new hc.HttpClient('setup-node', [], {
     allowRetries: true,
@@ -464,30 +467,10 @@ function translateArchToDistUrl(arch: string): string {
 }
 
 export async function parseNodeVersionFile(contents: string): Promise<string> {
-  contents = contents.trim();
+  let nodeVersion = contents.trim();
 
-  if (/^v\d/.test(contents)) {
-    contents = contents.substring(1);
+  if (/^v\d/.test(nodeVersion)) {
+    nodeVersion = nodeVersion.substring(1);
   }
-
-  const nodeVersions = await getVersionsFromDist();
-
-  let nodeVersion: string;
-
-  if (semver.valid(contents) || isPartialMatch(contents)) {
-    nodeVersion = contents;
-  } else {
-    throw new Error(`Couldn't resolve node version: '${contents}'`);
-  }
-
-  return stripVPrefix(nodeVersion);
+  return nodeVersion;
 }
-
-function isPartialMatch(version: string): boolean {
-  return /^\d+(\.\d+(\.\d+)?)?$/.test(version);
-}
-
-function stripVPrefix(version: string): string {
-  return /^v\d/.test(version) ? version.substring(1) : version;
-}
-
